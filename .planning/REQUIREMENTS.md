@@ -74,11 +74,36 @@
 
 ## Traceability
 
-| REQ-ID | Phase |
-|--------|-------|
-| PLY-01 → PLY-07 | Phase 1 |
-| ATT-01 → ATT-05 | Phase 1 |
-| FIX-01 → FIX-06 | Phase 2 |
-| TBL-01 → TBL-06 | Phase 3 |
-| TUT-01 → TUT-04 | Phase 4 |
-| ADM-01 → ADM-03 | Phase 1 (ADM-01), Phase 2 (ADM-02, ADM-03) |
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| PLY-01 | Phase 1 | Pending |
+| PLY-02 | Phase 1 | Pending |
+| PLY-03 | Phase 1 | Pending |
+| PLY-04 | Phase 1 | Pending |
+| PLY-05 | Phase 1 | Pending |
+| PLY-06 | Phase 1 | Pending |
+| PLY-07 | Phase 1 | Pending |
+| ATT-01 | Phase 1 | Pending |
+| ATT-02 | Phase 1 | Pending |
+| ATT-03 | Phase 1 | Pending |
+| ATT-04 | Phase 1 | Pending |
+| ATT-05 | Phase 4 | Pending |
+| FIX-01 | Phase 2 | Pending |
+| FIX-02 | Phase 2 | Pending |
+| FIX-03 | Phase 2 | Pending |
+| FIX-04 | Phase 2 | Pending |
+| FIX-05 | Phase 2 | Pending |
+| FIX-06 | Phase 2 | Pending |
+| TBL-01 | Phase 3 | Pending |
+| TBL-02 | Phase 3 | Pending |
+| TBL-03 | Phase 3 | Pending |
+| TBL-04 | Phase 3 | Pending |
+| TBL-05 | Phase 3 | Pending |
+| TBL-06 | Phase 3 | Pending |
+| TUT-01 | Phase 4 | Pending |
+| TUT-02 | Phase 4 | Pending |
+| TUT-03 | Phase 4 | Pending |
+| TUT-04 | Phase 4 | Pending |
+| ADM-01 | Phase 1 | Pending |
+| ADM-02 | Phase 2 | Pending |
+| ADM-03 | Phase 2 | Pending |
