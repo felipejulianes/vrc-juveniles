@@ -1,0 +1,164 @@
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { createCoach } from './actions'
+
+type DivisionRow = { id: string; name: string; is_juvenile?: boolean }
+type ProfileRow = { id: string; full_name: string | null; role: 'admin' | 'coach' | 'tutora' }
+type CoachDivisionRow = { coach_id: string; division_id: string; division_name?: string }
+
+export default async function AdminPage() {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  const profile = profileData as Pick<ProfileRow, 'role'> | null
+  if (profile?.role !== 'admin') {
+    redirect('/jugadores')
+  }
+
+  // Load all juvenile divisions
+  const { data: juvenileDivisionsData } = await supabase
+    .from('divisions')
+    .select('id, name')
+    .eq('is_juvenile', true)
+    .order('name')
+
+  const juvenileDivisions = (juvenileDivisionsData as DivisionRow[] | null) ?? []
+
+  // Load all coaches
+  const { data: coachesData } = await supabase
+    .from('profiles')
+    .select('id, full_name, role')
+    .eq('role', 'coach')
+    .order('full_name')
+
+  const coaches = (coachesData as ProfileRow[] | null) ?? []
+
+  // Load all coach_divisions and join with juvenile divisions manually
+  const { data: allCoachDivisionsData } = await supabase
+    .from('coach_divisions')
+    .select('coach_id, division_id')
+
+  const allCoachDivisions = (allCoachDivisionsData as CoachDivisionRow[] | null) ?? []
+
+  // Build a lookup map: division_id -> name (from juvenile list)
+  const divisionNameById = Object.fromEntries(
+    juvenileDivisions.map((d) => [d.id, d.name])
+  )
+
+  // Filter coach_divisions to only juvenile ones
+  const juvenileCoachDivisions = allCoachDivisions
+    .filter((cd) => divisionNameById[cd.division_id] !== undefined)
+    .map((cd) => ({
+      ...cd,
+      division_name: divisionNameById[cd.division_id],
+    }))
+
+  return (
+    <div className="p-4 space-y-6">
+      <h1 className="text-xl font-semibold">Administración</h1>
+
+      {/* Create Coach Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Crear nuevo coach</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form action={createCoach} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="full_name">Nombre completo</Label>
+              <Input
+                id="full_name"
+                name="full_name"
+                type="text"
+                placeholder="Juan Pérez"
+                required
+                minLength={2}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="coach@email.com"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Divisiones juveniles</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {juvenileDivisions.map((div) => (
+                  <label
+                    key={div.id}
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      name="division_ids"
+                      value={div.id}
+                      className="accent-primary"
+                    />
+                    {div.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <Button type="submit" className="w-full">
+              Crear coach
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      {/* Coaches list */}
+      <div>
+        <h2 className="text-base font-semibold mb-3">Coaches registrados</h2>
+        {coaches.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No hay coaches registrados.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {coaches.map((coach) => {
+              const myDivisions = juvenileCoachDivisions
+                .filter((cd) => cd.coach_id === coach.id)
+                .map((cd) => cd.division_name ?? '')
+                .filter(Boolean)
+
+              return (
+                <Card key={coach.id}>
+                  <CardContent className="pt-4 pb-3">
+                    <p className="text-sm font-medium">{coach.full_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {myDivisions.length > 0
+                        ? myDivisions.join(', ')
+                        : 'Sin divisiones asignadas'}
+                    </p>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
