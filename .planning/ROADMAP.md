@@ -30,7 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Coach can take attendance at a training session, edit a past session, and the data saves correctly even when the device goes offline (syncs on reconnect)
   5. Coach can browse the session history for their division and see who attended each session
   6. Admin can create coach accounts and assign them to M15-M19 divisions
-**Plans**: TBD
+**Plans**: 5 plans
+  - [ ] 01-01-PLAN.md — Scaffold: install runtime deps, shadcn components, dark-first globals, Inter font, next-pwa wiring, rugby positions constant
+  - [ ] 01-02-PLAN.md — Auth + app shell: Supabase SSR clients, middleware, login, (app) layout with bottom nav + division selector, ADM-01 coach creation, player_positions migration pushed
+  - [ ] 01-03-PLAN.md — Player list + profile (read): PLY-01 list, PLY-05 profile, PLY-06 inactive sort, PLY-07 inherited notes
+  - [ ] 01-04-PLAN.md — Player CRUD + photo upload: PLY-02 create, PLY-03 edit, PLY-04 positions, soft-delete, server-validated photo upload
+  - [ ] 01-05-PLAN.md — Attendance: ATT-01 grid, ATT-02 history, ATT-03 edit past, ATT-04 IDB queue + reconnect sync
 
 ### Phase 2: Fixture Management
 **Goal**: Coaches and admins can build and maintain the match calendar, record final scores, and import the URBA schedule from Excel
@@ -76,7 +81,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Players & Attendance | 0/TBD | Not started | - |
+| 1. Foundation, Players & Attendance | 0/5 | Not started | - |
 | 2. Fixture Management | 0/TBD | Not started | - |
 | 3. Team Builder | 0/TBD | Not started | - |
 | 4. Stats, Tutora & Polish | 0/TBD | Not started | - |
