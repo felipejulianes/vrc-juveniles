@@ -301,8 +301,8 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                 <FormItem>
                   <FormLabel>Puesto principal</FormLabel>
                   <Select
-                    onValueChange={(val) => field.onChange(val === '' ? null : Number(val))}
-                    value={field.value != null ? String(field.value) : ''}
+                    onValueChange={(val) => field.onChange(val === 'none' ? null : Number(val))}
+                    value={field.value != null ? String(field.value) : 'none'}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -310,7 +310,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Sin asignar</SelectItem>
+                      <SelectItem value="none">Sin asignar</SelectItem>
                       <SelectGroup>
                         <SelectLabel>Forwards</SelectLabel>
                         {FORWARDS.map((p) => (
@@ -340,8 +340,8 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                 <FormItem>
                   <FormLabel>Puesto alternativo</FormLabel>
                   <Select
-                    onValueChange={(val) => field.onChange(val === '' ? null : Number(val))}
-                    value={field.value != null ? String(field.value) : ''}
+                    onValueChange={(val) => field.onChange(val === 'none' ? null : Number(val))}
+                    value={field.value != null ? String(field.value) : 'none'}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -349,7 +349,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Sin asignar</SelectItem>
+                      <SelectItem value="none">Sin asignar</SelectItem>
                       <SelectGroup>
                         <SelectLabel>Forwards</SelectLabel>
                         {FORWARDS.map((p) => (
