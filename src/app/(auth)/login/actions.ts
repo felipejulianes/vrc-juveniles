@@ -26,7 +26,7 @@ export async function signInWithMagicLink(formData: FormData) {
   })
 
   if (error) {
-    throw new Error('No se pudo enviar el enlace. Intentá de nuevo.')
+throw new Error('No se pudo enviar el enlace. Intentá de nuevo.')
   }
 
   redirect('/login?sent=1')
