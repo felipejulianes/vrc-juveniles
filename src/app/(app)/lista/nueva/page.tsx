@@ -1,9 +1,12 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { listSessionsByDivision, type SessionWithCount } from '@/lib/queries/attendance'
-import { SessionList } from '@/components/attendance/SessionList'
+import { SessionForm } from '@/components/attendance/SessionForm'
 
-export default async function ListaPage() {
+interface NuevaSessionPageProps {
+  searchParams: { division?: string }
+}
+
+export default async function NuevaSessionPage({ searchParams }: NuevaSessionPageProps) {
   const supabase = createClient()
 
   const {
@@ -21,8 +24,7 @@ export default async function ListaPage() {
 
   const profile = profileData as { role: string } | null
 
-  // Fetch juvenile divisions for this coach / admin
-  let juvenileDivisions: { id: string; name: string }[] = []
+  let availableDivisions: { id: string; name: string }[] = []
 
   if (profile?.role === 'admin') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +33,7 @@ export default async function ListaPage() {
       .select('id, name')
       .eq('is_juvenile', true)
       .order('name')
-    juvenileDivisions = (allDivs as { id: string; name: string }[] | null) ?? []
+    availableDivisions = (allDivs as { id: string; name: string }[] | null) ?? []
   } else {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: cdData } = await (supabase as any)
@@ -50,27 +52,27 @@ export default async function ListaPage() {
         .eq('is_juvenile', true)
         .in('id', coachDivisionIds)
         .order('name')
-      juvenileDivisions = (divsData as { id: string; name: string }[] | null) ?? []
+      availableDivisions = (divsData as { id: string; name: string }[] | null) ?? []
     }
   }
 
-  // Fetch sessions for all juvenile divisions in parallel
-  const sessionsByDivision: Record<string, SessionWithCount[]> = {}
+  if (availableDivisions.length === 0) redirect('/lista')
 
-  await Promise.all(
-    juvenileDivisions.map(async (div) => {
-      try {
-        sessionsByDivision[div.id] = await listSessionsByDivision(div.id)
-      } catch {
-        sessionsByDivision[div.id] = []
-      }
-    })
-  )
+  // Pick defaultDivisionId from searchParams if valid, else first available
+  const requestedDivisionId = searchParams.division
+  const defaultDivision =
+    availableDivisions.find((d) => d.id === requestedDivisionId) ??
+    availableDivisions[0]
+
+  if (!defaultDivision) redirect('/lista')
 
   return (
-    <div>
-      <h1 className="text-xl font-semibold px-4 pt-4 pb-0">Lista</h1>
-      <SessionList sessionsByDivision={sessionsByDivision} />
+    <div className="px-4 py-4 max-w-lg mx-auto">
+      {/* Iniciar entrenamiento */}
+      <SessionForm
+        availableDivisions={availableDivisions}
+        defaultDivisionId={defaultDivision.id}
+      />
     </div>
   )
 }

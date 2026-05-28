@@ -6,6 +6,7 @@ import { BottomNav } from '@/components/layout/BottomNav'
 import { OfflineBanner } from '@/components/layout/OfflineBanner'
 import { PendingActivationScreen } from '@/components/layout/PendingActivationScreen'
 import { Toaster } from '@/components/ui/sonner'
+import { SyncProvider } from '@/components/attendance/SyncProvider'
 
 export default async function AppLayout({
   children,
@@ -76,15 +77,17 @@ export default async function AppLayout({
 
   return (
     <DivisionProvider initialDivisions={juvenileDivisions}>
-      <div className="flex flex-col min-h-screen">
-        <AppHeader />
-        <OfflineBanner />
-        <main className="flex-1 pb-[calc(64px+env(safe-area-inset-bottom))]">
-          {children}
-        </main>
-        <BottomNav userRole={userRole as 'admin' | 'coach' | 'tutora'} />
-        <Toaster />
-      </div>
+      <SyncProvider>
+        <div className="flex flex-col min-h-screen">
+          <AppHeader />
+          <OfflineBanner />
+          <main className="flex-1 pb-[calc(64px+env(safe-area-inset-bottom))]">
+            {children}
+          </main>
+          <BottomNav userRole={userRole as 'admin' | 'coach' | 'tutora'} />
+          <Toaster />
+        </div>
+      </SyncProvider>
     </DivisionProvider>
   )
 }
