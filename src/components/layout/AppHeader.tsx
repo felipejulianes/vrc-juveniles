@@ -1,6 +1,5 @@
-'use client'
-
 import { DivisionSelector } from './DivisionSelector'
+import { LogoutButton } from './LogoutButton'
 
 export function AppHeader() {
   return (
@@ -17,7 +16,10 @@ export function AppHeader() {
       >
         VRC Juveniles
       </span>
-      <DivisionSelector />
+      <div className="flex items-center gap-2">
+        <DivisionSelector />
+        <LogoutButton />
+      </div>
     </header>
   )
 }
