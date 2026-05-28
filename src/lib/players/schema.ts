@@ -19,8 +19,9 @@ export const PlayerFormSchema = z.object({
   parent_phone: z.string().trim().max(30).optional().or(z.literal('')),
   parent_name: z.string().trim().max(80).optional().or(z.literal('')),
   division_id: z.string().min(1, 'División requerida'),
-  position_primary: z.coerce.number().int().min(1).max(15).optional().nullable(),
-  position_alt1: z.coerce.number().int().min(1).max(15).optional().nullable(),
+  // Use z.number() (not z.coerce) — form converts Select string values to number before submitting
+  position_primary: z.number().int().min(1).max(15).optional().nullable(),
+  position_alt1: z.number().int().min(1).max(15).optional().nullable(),
 })
 
 export type PlayerFormInput = z.infer<typeof PlayerFormSchema>
