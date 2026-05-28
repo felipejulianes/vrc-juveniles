@@ -64,6 +64,95 @@ export type Database = {
           updated_by: string | null
         }>
       }
+      players: {
+        Row: {
+          id: string
+          division_id: string
+          first_name: string
+          last_name: string
+          dni: string | null
+          birth_date: string | null
+          photo_url: string | null
+          inactivo: boolean
+          active: boolean
+          parent_name: string | null
+          parent_phone: string | null
+          parent_name_2: string | null
+          parent_phone_2: string | null
+          sobrenombre: string | null
+          fecha_alta: string | null
+          colegio: string | null
+          school_id: string | null
+          grado: string | null
+          address: string | null
+          lat: number | null
+          lng: number | null
+          maps_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          division_id: string
+          first_name: string
+          last_name: string
+          dni?: string | null
+          birth_date?: string | null
+          photo_url?: string | null
+          inactivo?: boolean
+          active?: boolean
+          parent_name?: string | null
+          parent_phone?: string | null
+          parent_name_2?: string | null
+          parent_phone_2?: string | null
+          sobrenombre?: string | null
+          fecha_alta?: string | null
+          colegio?: string | null
+          school_id?: string | null
+          grado?: string | null
+          address?: string | null
+        }
+        Update: Partial<{
+          division_id: string
+          first_name: string
+          last_name: string
+          dni: string | null
+          birth_date: string | null
+          photo_url: string | null
+          inactivo: boolean
+          active: boolean
+          parent_name: string | null
+          parent_phone: string | null
+          parent_name_2: string | null
+          parent_phone_2: string | null
+          sobrenombre: string | null
+          fecha_alta: string | null
+          colegio: string | null
+          school_id: string | null
+          grado: string | null
+          address: string | null
+        }>
+      }
+      player_notes: {
+        Row: {
+          id: string
+          player_id: string
+          note_date: string | null
+          content: string
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          player_id: string
+          content: string
+          note_date?: string | null
+          created_by?: string | null
+        }
+        Update: Partial<{
+          content: string
+          note_date: string | null
+        }>
+      }
     }
   }
 }
