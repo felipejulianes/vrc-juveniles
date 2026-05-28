@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { getById, getNotes } from '@/lib/queries/players'
 import { RUGBY_POSITIONS } from '@/lib/positions/constants'
-import { PlayerAvatar } from '@/components/players/PlayerAvatar'
 import { PlayerPositionBadge } from '@/components/players/PlayerPositionBadge'
+import { AvatarUpload } from '@/components/players/AvatarUpload'
+import { PlayerProfileActions } from '@/components/players/PlayerProfileActions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 
 interface Props {
   params: { id: string }
@@ -67,14 +67,14 @@ export default async function JugadorProfilePage({ params }: Props) {
         Jugadores
       </Link>
 
-      {/* Header card — avatar + name */}
+      {/* Header card — avatar (re-uploadable) + name */}
       <Card className="bg-card border-border">
         <CardContent className="flex flex-col items-center py-6 px-6 gap-3">
-          <PlayerAvatar
-            src={player.photo_url}
+          <AvatarUpload
+            playerId={player.id}
+            initialPhotoUrl={player.photo_url}
             firstName={player.first_name}
             lastName={player.last_name}
-            size="lg"
           />
           <h1 className="text-xl font-semibold text-center">
             {player.first_name} {player.last_name}
@@ -178,32 +178,11 @@ export default async function JugadorProfilePage({ params }: Props) {
         </CardContent>
       </Card>
 
-      {/* Acciones section — disabled until Plan 04 */}
-      <div className="mt-6 flex flex-col gap-3">
-        <Button
-          asChild
-          variant="default"
-          className="w-full bg-[color:var(--primary)] text-[color:var(--primary-foreground)]"
-          aria-disabled
-        >
-          <Link
-            href={`/jugadores/${params.id}/editar`}
-            aria-disabled="true"
-            className="pointer-events-none opacity-50 cursor-not-allowed"
-          >
-            Editar
-          </Link>
-        </Button>
-        <Button
-          variant="destructive"
-          className="w-full opacity-50 cursor-not-allowed"
-          disabled
-          aria-disabled="true"
-          title="Disponible próximamente"
-        >
-          Eliminar jugador
-        </Button>
-      </div>
+      {/* Acciones section — wired to Server Actions via PlayerProfileActions */}
+      <PlayerProfileActions
+        playerId={player.id}
+        playerName={`${player.first_name} ${player.last_name}`}
+      />
     </div>
   )
 }

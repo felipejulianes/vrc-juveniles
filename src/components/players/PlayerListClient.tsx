@@ -29,13 +29,13 @@ export function PlayerListClient({ initialPlayersByDivision }: PlayerListClientP
         )}
       </div>
 
-      {/* FAB — Floating Action Button */}
+      {/* FAB — Floating Action Button — passes active division so /nuevo pre-selects it */}
       <Button
         asChild
         className="fixed right-4 bottom-[calc(64px+env(safe-area-inset-bottom)+16px)] h-14 w-14 rounded-full bg-[color:var(--primary)] shadow-lg p-0"
         aria-label="Agregar jugador"
       >
-        <Link href="/jugadores/nuevo">
+        <Link href={activeDivision ? `/jugadores/nuevo?division=${activeDivision.id}` : '/jugadores/nuevo'}>
           <Plus className="h-6 w-6" aria-hidden="true" />
         </Link>
       </Button>

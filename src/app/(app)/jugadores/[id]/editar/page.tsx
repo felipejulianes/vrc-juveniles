@@ -1,5 +1,6 @@
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getById } from '@/lib/queries/players'
 import { PlayerForm } from '@/components/players/PlayerForm'
 import type { Database } from '@/lib/supabase/database.types'
 
@@ -8,10 +9,13 @@ type DivisionRow = Database['public']['Tables']['divisions']['Row']
 type CoachDivisionRow = Database['public']['Tables']['coach_divisions']['Row']
 
 interface Props {
-  searchParams: { division?: string }
+  params: { id: string }
 }
 
-export default async function NuevoJugadorPage({ searchParams }: Props) {
+export default async function EditarJugadorPage({ params }: Props) {
+  const player = await getById(params.id)
+  if (!player) notFound()
+
   const supabase = createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any
@@ -51,20 +55,26 @@ export default async function NuevoJugadorPage({ searchParams }: Props) {
     }))
   }
 
-  const defaultDivisionId =
-    searchParams.division && availableDivisions.find((d) => d.id === searchParams.division)
-      ? searchParams.division
-      : availableDivisions[0]?.id
-
-  if (!defaultDivisionId) redirect('/jugadores')
-
   return (
     <div className="px-4 py-4">
-      <h1 className="text-[20px] font-semibold mb-4">Agregar jugador</h1>
+      <h1 className="text-[20px] font-semibold mb-4">Editar jugador</h1>
       <PlayerForm
-        mode="create"
+        mode="edit"
         availableDivisions={availableDivisions}
-        defaultDivisionId={defaultDivisionId}
+        defaultDivisionId={player.division_id}
+        initial={{
+          id: player.id,
+          first_name: player.first_name,
+          last_name: player.last_name,
+          dni: player.dni,
+          birth_date: player.birth_date,
+          parent_phone: player.parent_phone,
+          parent_name: player.parent_name,
+          division_id: player.division_id,
+          photo_url: player.photo_url,
+          position_primary: player.player_positions?.position_primary ?? null,
+          position_alt1: player.player_positions?.position_alt1 ?? null,
+        }}
       />
     </div>
   )
