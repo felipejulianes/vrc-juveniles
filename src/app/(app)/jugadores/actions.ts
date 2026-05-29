@@ -4,6 +4,9 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { PlayerFormSchema, type PlayerFormInput } from '@/lib/players/schema'
 import type { Database } from '@/lib/supabase/database.types'
+import { RUGBY_POSITIONS } from '@/lib/positions/constants'
+
+const VALID_POSITION_NUMBERS = new Set<number>(RUGBY_POSITIONS.map((p) => p.number))
 
 type ProfileRow = Database['public']['Tables']['profiles']['Row']
 type CoachDivisionRow = Database['public']['Tables']['coach_divisions']['Row']
@@ -104,6 +107,7 @@ export async function createPlayer(input: PlayerFormInput): Promise<{ playerId: 
     parent_phone: parsed.parent_phone || null,
     parent_name: parsed.parent_name || null,
     inactivo: false,
+    apto_medico: parsed.apto_medico,
   }
 
   const { data, error } = await sb.from('players').insert(insertPayload).select('id').single()
@@ -144,6 +148,7 @@ export async function updatePlayer(playerId: string, input: PlayerFormInput): Pr
     parent_phone: parsed.parent_phone || null,
     parent_name: parsed.parent_name || null,
     division_id: parsed.division_id,
+    apto_medico: parsed.apto_medico,
   }
 
   const { error } = await sb.from('players').update(updatePayload).eq('id', playerId)
@@ -171,8 +176,8 @@ export async function upsertPositions(
   primary: number | null,
   alt1: number | null
 ): Promise<void> {
-  if (primary != null && (primary < 1 || primary > 15)) throw new Error('Puesto principal inválido')
-  if (alt1 != null && (alt1 < 1 || alt1 > 15)) throw new Error('Puesto alternativo inválido')
+  if (primary != null && !VALID_POSITION_NUMBERS.has(primary)) throw new Error('Puesto principal inválido')
+  if (alt1 != null && !VALID_POSITION_NUMBERS.has(alt1)) throw new Error('Puesto alternativo inválido')
 
   const { userId } = await requireCoachForPlayer(playerId)
   const supabase = createClient()

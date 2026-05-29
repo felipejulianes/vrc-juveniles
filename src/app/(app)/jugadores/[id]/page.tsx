@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { getById, getNotes } from '@/lib/queries/players'
-import { RUGBY_POSITIONS } from '@/lib/positions/constants'
+import { getPositionByNumber } from '@/lib/positions/constants'
 import { PlayerPositionBadge } from '@/components/players/PlayerPositionBadge'
 import { AvatarUpload } from '@/components/players/AvatarUpload'
 import { PlayerProfileActions } from '@/components/players/PlayerProfileActions'
@@ -39,9 +39,7 @@ function relativeTime(isoDate: string): string {
 }
 
 function getPositionName(positionNumber: number | null): string | null {
-  if (positionNumber === null) return null
-  const pos = RUGBY_POSITIONS.find((p) => p.number === positionNumber)
-  return pos ? pos.name : null
+  return getPositionByNumber(positionNumber)?.name ?? null
 }
 
 export default async function JugadorProfilePage({ params }: Props) {
@@ -108,6 +106,12 @@ export default async function JugadorProfilePage({ params }: Props) {
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Padre/Madre</span>
             <span className="text-base">{player.parent_name ?? '—'}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground">Apto médico</span>
+            <span className={`text-base font-medium ${player.apto_medico ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {player.apto_medico ? 'Presentado' : 'Pendiente'}
+            </span>
           </div>
         </CardContent>
       </Card>

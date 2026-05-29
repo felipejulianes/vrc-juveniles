@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ShieldCheck } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PlayerAvatar } from './PlayerAvatar'
@@ -41,6 +42,9 @@ export function PlayerCard({ player }: PlayerCardProps) {
             )}
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            {player.apto_medico && (
+              <ShieldCheck className="h-4 w-4 text-green-500 shrink-0" aria-label="Apto médico presentado" />
+            )}
             <PlayerPositionBadge
               positionNumber={player.player_positions?.position_primary ?? null}
             />

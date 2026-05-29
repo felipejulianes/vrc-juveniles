@@ -1,20 +1,19 @@
 export const RUGBY_POSITIONS = [
-  { number: 1,  name: 'Pilar izquierdo',    group: 'Forwards' },
-  { number: 2,  name: 'Hooker',             group: 'Forwards' },
-  { number: 3,  name: 'Pilar derecho',      group: 'Forwards' },
-  { number: 4,  name: 'Segundo línea',      group: 'Forwards' },
-  { number: 5,  name: 'Segundo línea',      group: 'Forwards' },
-  { number: 6,  name: 'Ala ciego',          group: 'Forwards' },
-  { number: 7,  name: 'Ala abierto',        group: 'Forwards' },
-  { number: 8,  name: 'Octavo',             group: 'Forwards' },
-  { number: 9,  name: 'Medio scrum',        group: 'Backs' },
-  { number: 10, name: 'Apertura',           group: 'Backs' },
-  { number: 11, name: 'Ala izquierdo',      group: 'Backs' },
-  { number: 12, name: 'Centro interno',     group: 'Backs' },
-  { number: 13, name: 'Centro externo',     group: 'Backs' },
-  { number: 14, name: 'Ala derecho',        group: 'Backs' },
-  { number: 15, name: 'Fullback',           group: 'Backs' },
+  { number: 1,  abbr: 'PIL', name: 'Pilar',       covers: [1, 3],     group: 'Forwards' },
+  { number: 2,  abbr: 'HOO', name: 'Hooker',       covers: [2],        group: 'Forwards' },
+  { number: 4,  abbr: '2L',  name: '2da línea',    covers: [4, 5],     group: 'Forwards' },
+  { number: 6,  abbr: 'ALA', name: 'Ala',          covers: [6, 7, 8],  group: 'Forwards' },
+  { number: 9,  abbr: 'MS',  name: 'Medio scrum',  covers: [9],        group: 'Backs' },
+  { number: 10, abbr: 'APT', name: 'Apertura',     covers: [10],       group: 'Backs' },
+  { number: 12, abbr: 'INS', name: 'Inside',       covers: [12, 13],   group: 'Backs' },
+  { number: 11, abbr: 'WIN', name: 'Wing',         covers: [11, 14],   group: 'Backs' },
+  { number: 15, abbr: 'FB',  name: 'Fullback',     covers: [15],       group: 'Backs' },
 ] as const
 
 export type PositionNumber = typeof RUGBY_POSITIONS[number]['number']
 export type PositionGroup = 'Forwards' | 'Backs'
+
+export function getPositionByNumber(n: number | null) {
+  if (n === null) return null
+  return RUGBY_POSITIONS.find((p) => (p.covers as readonly number[]).includes(n)) ?? null
+}

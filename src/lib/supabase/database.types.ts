@@ -75,6 +75,7 @@ export type Database = {
           photo_url: string | null
           inactivo: boolean
           active: boolean
+          apto_medico: boolean
           parent_name: string | null
           parent_phone: string | null
           parent_name_2: string | null
@@ -101,6 +102,7 @@ export type Database = {
           photo_url?: string | null
           inactivo?: boolean
           active?: boolean
+          apto_medico?: boolean
           parent_name?: string | null
           parent_phone?: string | null
           parent_name_2?: string | null
@@ -121,6 +123,7 @@ export type Database = {
           photo_url: string | null
           inactivo: boolean
           active: boolean
+          apto_medico: boolean
           parent_name: string | null
           parent_phone: string | null
           parent_name_2: string | null

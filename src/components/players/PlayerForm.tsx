@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Select,
   SelectContent,
@@ -42,6 +43,7 @@ type InitialValues = {
   photo_url: string | null
   position_primary: number | null
   position_alt1: number | null
+  apto_medico: boolean
 }
 
 type Props = {
@@ -74,6 +76,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
       division_id: initial?.division_id ?? defaultDivisionId,
       position_primary: initial?.position_primary ?? null,
       position_alt1: initial?.position_alt1 ?? null,
+      apto_medico: initial?.apto_medico ?? false,
     },
   })
 
@@ -252,6 +255,21 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="apto_medico"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center gap-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="font-normal cursor-pointer">Presentó apto médico</FormLabel>
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -315,7 +333,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                         <SelectLabel>Forwards</SelectLabel>
                         {FORWARDS.map((p) => (
                           <SelectItem key={p.number} value={String(p.number)}>
-                            {p.number} — {p.name}
+                            {p.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -323,7 +341,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                         <SelectLabel>Backs</SelectLabel>
                         {BACKS.map((p) => (
                           <SelectItem key={p.number} value={String(p.number)}>
-                            {p.number} — {p.name}
+                            {p.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -354,7 +372,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                         <SelectLabel>Forwards</SelectLabel>
                         {FORWARDS.map((p) => (
                           <SelectItem key={p.number} value={String(p.number)}>
-                            {p.number} — {p.name}
+                            {p.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -362,7 +380,7 @@ export function PlayerForm({ mode, initial, availableDivisions, defaultDivisionI
                         <SelectLabel>Backs</SelectLabel>
                         {BACKS.map((p) => (
                           <SelectItem key={p.number} value={String(p.number)}>
-                            {p.number} — {p.name}
+                            {p.name}
                           </SelectItem>
                         ))}
                       </SelectGroup>

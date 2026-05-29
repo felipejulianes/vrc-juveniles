@@ -74,6 +74,7 @@ export default async function EditarJugadorPage({ params }: Props) {
           photo_url: player.photo_url,
           position_primary: player.player_positions?.position_primary ?? null,
           position_alt1: player.player_positions?.position_alt1 ?? null,
+          apto_medico: player.apto_medico ?? false,
         }}
       />
     </div>

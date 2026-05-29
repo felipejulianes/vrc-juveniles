@@ -22,6 +22,7 @@ export const PlayerFormSchema = z.object({
   // Use z.number() (not z.coerce) — form converts Select string values to number before submitting
   position_primary: z.number().int().min(1).max(15).optional().nullable(),
   position_alt1: z.number().int().min(1).max(15).optional().nullable(),
+  apto_medico: z.boolean(),
 })
 
 export type PlayerFormInput = z.infer<typeof PlayerFormSchema>
