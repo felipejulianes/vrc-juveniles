@@ -2,16 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-stopped_at: Phase 2 — ready to plan; fixture CSV extracted, positions+apto_medico fixes committed
-last_updated: "2026-05-29"
-last_activity: 2026-05-29 — positions simplified to 9 roles, apto_medico added, fixture CSV generated from URBA PDF
+status: verifying
+stopped_at: Phase 2 context gathered
+last_updated: "2026-05-29T18:18:03.356Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 0
   total_plans: 5
-  completed_plans: 5
-  percent: 25
+  completed_plans: 4
+  percent: 80
 ---
 
 # Project State
@@ -44,6 +43,7 @@ Progress: [██░░░░░░░░] 20%
 ## Schema Deviations (discovered 2026-05-29)
 
 The shared `training_sessions` and `attendance_records` tables preexisted from infantiles with a different schema than planned:
+
 - `training_sessions`: no `day_label` column — removed from types, insert, and form entirely
 - `attendance_records`: only 3 columns (`session_id`, `player_id`, `present`) — no `recorded_by`, no `recorded_at` — removed from types and upserts
 - `session_type = 'entrenamiento'` confirmed working ✓
@@ -61,12 +61,14 @@ The shared `training_sessions` and `attendance_records` tables preexisted from i
 ## Tech Debt — Deferred Verification (verify at Vercel deploy)
 
 **Part B — Offline (can test via DevTools → Network → Offline):**
+
 - Confirm offline banner appears
 - Confirm player roster loads from IDB cache
 - Tap players → cards flip green → "{n} cambios pendientes"
 - Reconnect → "Lista sincronizada" toast
 
 **Part C — Authorization:**
+
 - Deep-link to session from another division → notFound()
 - Direct Server Action call with wrong session → auth error
 
@@ -77,5 +79,5 @@ The shared `training_sessions` and `attendance_records` tables preexisted from i
 
 ## Session Continuity
 
-Last session: 2026-05-29
-Stopped at: Phase 2 ready — fixture CSV at fixture-virreyes-2026.csv (60 matches, all divisions), positions+apto_medico fixes committed. Run /gsd-plan-phase to plan Phase 2.
+Last session: 2026-05-29T18:18:03.353Z
+Stopped at: Phase 2 context gathered
