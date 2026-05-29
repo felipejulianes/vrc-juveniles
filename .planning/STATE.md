@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Phase 1 complete — advancing to Phase 2
+stopped_at: Phase 2 — ready to plan; fixture CSV extracted, positions+apto_medico fixes committed
 last_updated: "2026-05-29"
-last_activity: 2026-05-29 — Plan 01-05 closed; offline queue (Part B) and auth deep-link (Part C) deferred as tech debt
+last_activity: 2026-05-29 — positions simplified to 9 roles, apto_medico added, fixture CSV generated from URBA PDF
 progress:
   total_phases: 4
   completed_phases: 1
@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-24)
 
 **Core value:** El entrenador llega al partido sabiendo quiénes vinieron a entrenar, qué puesto juega cada uno, y puede armar el equipo del sábado desde la app en segundos
-**Current focus:** Phase 2 — Fixture Management
+**Current focus:** Phase 2 — Fixture Management (ready to plan)
 
 ## Current Position
 
@@ -78,4 +78,4 @@ The shared `training_sessions` and `attendance_records` tables preexisted from i
 ## Session Continuity
 
 Last session: 2026-05-29
-Stopped at: Phase 1 complete — next is Phase 2 Fixture Management
+Stopped at: Phase 2 ready — fixture CSV at fixture-virreyes-2026.csv (60 matches, all divisions), positions+apto_medico fixes committed. Run /gsd-plan-phase to plan Phase 2.
