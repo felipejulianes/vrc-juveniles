@@ -26,7 +26,7 @@ export function SessionList({ sessionsByDivision }: SessionListProps) {
               : '/lista/nueva'
           }
         >
-          Iniciar entrenamiento
+          Tomar lista
         </Link>
       </Button>
 

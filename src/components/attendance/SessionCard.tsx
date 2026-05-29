@@ -38,7 +38,7 @@ export function SessionCard({ session }: SessionCardProps) {
         <CardContent className="p-4 flex items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5 min-w-0">
             <span className="text-base font-semibold leading-tight">
-              {formatSessionDate(session.session_date, session.day_label)}
+              {formatSessionDate(session.session_date, null)}
             </span>
             <span className="text-sm text-muted-foreground">
               {session.present_count} presentes

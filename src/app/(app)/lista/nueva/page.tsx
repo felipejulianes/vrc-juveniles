@@ -68,11 +68,7 @@ export default async function NuevaSessionPage({ searchParams }: NuevaSessionPag
 
   return (
     <div className="px-4 py-4 max-w-lg mx-auto">
-      {/* Iniciar entrenamiento */}
-      <SessionForm
-        availableDivisions={availableDivisions}
-        defaultDivisionId={defaultDivision.id}
-      />
+      <SessionForm divisionId={defaultDivision.id} />
     </div>
   )
 }

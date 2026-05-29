@@ -22,13 +22,12 @@ export default async function EditSessionPage({ params }: EditSessionPageProps) 
   }
 
   return (
-    <div className="px-4 py-4 flex flex-col gap-3">
-      <AttendanceGrid
-        sessionId={session.id}
-        divisionId={session.division_id}
-        initialPlayers={players}
-        initialAttendance={initialAttendance}
-      />
-    </div>
+    <AttendanceGrid
+      sessionId={session.id}
+      divisionId={session.division_id}
+      sessionDate={session.session_date}
+      initialPlayers={players}
+      initialAttendance={initialAttendance}
+    />
   )
 }

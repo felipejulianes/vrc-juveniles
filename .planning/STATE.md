@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-05-26T22:39:46.245Z"
-last_activity: 2026-05-25 — Roadmap created (4 phases, 31 requirements mapped)
+status: in_progress
+stopped_at: Phase 1 complete — advancing to Phase 2
+last_updated: "2026-05-29"
+last_activity: 2026-05-29 — Plan 01-05 closed; offline queue (Part B) and auth deep-link (Part C) deferred as tech debt
 progress:
   total_phases: 4
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 5
+  completed_plans: 5
+  percent: 25
 ---
 
 # Project State
@@ -21,60 +21,61 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-24)
 
 **Core value:** El entrenador llega al partido sabiendo quiénes vinieron a entrenar, qué puesto juega cada uno, y puede armar el equipo del sábado desde la app en segundos
-**Current focus:** Phase 1 — Foundation, Players & Attendance
+**Current focus:** Phase 2 — Fixture Management
 
 ## Current Position
 
 Phase: 1 of 4 (Foundation, Players & Attendance)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-05-25 — Roadmap created (4 phases, 31 requirements mapped)
+Plan: 01-05 — Complete ✅
+Status: Online flow verified. Offline queue (Part B) and auth deep-link (Part C) deferred as known tech debt — to verify when deploying to Vercel.
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 20%
 
-## Performance Metrics
+## Phase 1 Plan Status
 
-**Velocity:**
+| Plan | Description | Status |
+|------|-------------|--------|
+| 01-01 | Scaffold, deps, shadcn, PWA | ✅ Complete |
+| 01-02 | Auth, app shell, bottom nav, division selector | ✅ Complete |
+| 01-03 | Player list + profile (read) | ✅ Complete |
+| 01-04 | Player CRUD + photo upload | ✅ Complete |
+| 01-05 | Attendance: grid, history, edit, offline queue | ✅ Complete (offline+auth verify deferred to Vercel deploy) |
 
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: 0 hours
+## Schema Deviations (discovered 2026-05-29)
 
-**By Phase:**
+The shared `training_sessions` and `attendance_records` tables preexisted from infantiles with a different schema than planned:
+- `training_sessions`: no `day_label` column — removed from types, insert, and form entirely
+- `attendance_records`: only 3 columns (`session_id`, `player_id`, `present`) — no `recorded_by`, no `recorded_at` — removed from types and upserts
+- `session_type = 'entrenamiento'` confirmed working ✓
+- Composite PK on `(session_id, player_id)` confirmed working for upsert conflict target ✓
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
+## UX Changes Made (2026-05-29)
 
-**Recent Trend:**
+- AttendanceGrid redesigned: list rows → 3-column square card grid with player photos
+- Back button added to attendance screen
+- Toast "Presente ✓" / "Ausente" per tap (1.2s) confirms auto-save
+- "Tomar lista" / "Abrir lista" copy replaces "Iniciar/Finalizar entrenamiento"
+- SessionForm simplified: removed day chip selector (redundant with date), removed division selector (uses active division from header)
+- `day_label` removed from schema, form, and DB types entirely
 
-- Last 5 plans: -
-- Trend: -
+## Tech Debt — Deferred Verification (verify at Vercel deploy)
 
-*Updated after each plan completion*
+**Part B — Offline (can test via DevTools → Network → Offline):**
+- Confirm offline banner appears
+- Confirm player roster loads from IDB cache
+- Tap players → cards flip green → "{n} cambios pendientes"
+- Reconnect → "Lista sincronizada" toast
 
-## Accumulated Context
+**Part C — Authorization:**
+- Deep-link to session from another division → notFound()
+- Direct Server Action call with wrong session → auth error
 
-### Decisions
+## Blockers/Concerns
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- Init: Shared Supabase with infantiles — all migrations must be additive-only (migrations 033-035 are new tables only)
-- Init: tap-to-place is primary mobile UX for lineup builder — validate on real iPhone before building full field diagram
-- Init: Manual fixture entry ships before Excel import — unblocks coaches faster and validates URBA format first
-
-### Pending Todos
-
-None yet.
-
-### Blockers/Concerns
-
-- Phase 2: Need a real URBA fixture Excel file from the club admin before writing the parser (column headers and merged-cell patterns unverified)
-- Phase 3: iOS PWA tap-to-place / @dnd-kit pointer behavior must be validated on a real iPhone before committing to the drag-first interaction model
+- Phase 2: Need a real URBA fixture Excel file from the club admin before writing the parser
+- Phase 3: iOS PWA tap-to-place / @dnd-kit behavior must be validated on a real iPhone
 
 ## Session Continuity
 
-Last session: 2026-05-26T22:39:46.242Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-foundation-players-attendance/01-CONTEXT.md
+Last session: 2026-05-29
+Stopped at: Phase 1 complete — next is Phase 2 Fixture Management

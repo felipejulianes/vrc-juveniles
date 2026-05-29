@@ -42,3 +42,12 @@ public/sw.js
 public/sw.js.map
 public/workbox-*.js
 public/workbox-*.js.map
+
+# Claude Code worktrees (isolated agent copies of the repo)
+.claude/worktrees/
+
+# playwright MCP
+.playwright-mcp/
+
+# UAT screenshots
+*.png

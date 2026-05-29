@@ -159,7 +159,6 @@ export type Database = {
           division_id: string
           session_date: string
           session_type: string
-          day_label: string | null
           created_by: string | null
           created_at: string
         }
@@ -168,12 +167,10 @@ export type Database = {
           division_id: string
           session_date: string
           session_type: string
-          day_label?: string | null
           created_by?: string | null
         }
         Update: Partial<{
           session_date: string
-          day_label: string | null
           session_type: string
         }>
       }
@@ -182,18 +179,14 @@ export type Database = {
           session_id: string
           player_id: string
           present: boolean
-          recorded_by: string | null
-          recorded_at: string
         }
         Insert: {
           session_id: string
           player_id: string
           present: boolean
-          recorded_by?: string | null
         }
         Update: Partial<{
           present: boolean
-          recorded_by: string | null
         }>
       }
     }

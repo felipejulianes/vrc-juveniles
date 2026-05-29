@@ -110,7 +110,6 @@ export async function createSession(
       division_id: parsed.division_id,
       session_date: parsed.session_date,
       session_type: 'entrenamiento',
-      day_label: parsed.day_label,
       created_by: userId,
     })
     .select('id')
@@ -137,7 +136,6 @@ export async function upsertAttendance(
       session_id: sessionId,
       player_id: playerId,
       present,
-      recorded_by: userId,
     },
     { onConflict: 'session_id,player_id' }
   )
@@ -159,7 +157,6 @@ export async function batchUpsertAttendance(
     session_id: sessionId,
     player_id: i.playerId,
     present: i.present,
-    recorded_by: userId,
   }))
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
