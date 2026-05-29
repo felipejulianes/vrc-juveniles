@@ -1,7 +1,8 @@
 ---
 phase: 2
 slug: fixture-management
-status: draft
+status: approved
+reviewed_at: 2026-05-29
 shadcn_initialized: true
 preset: radix-nova / neutral / dark-first / cssVariables
 created: 2026-05-29
