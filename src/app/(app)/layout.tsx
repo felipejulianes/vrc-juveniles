@@ -76,7 +76,7 @@ export default async function AppLayout({
   const userRole = profile?.role ?? 'coach'
 
   return (
-    <DivisionProvider initialDivisions={juvenileDivisions}>
+    <DivisionProvider initialDivisions={juvenileDivisions} userRole={userRole as 'admin' | 'coach' | 'tutora'}>
       <SyncProvider>
         <div className="flex flex-col min-h-screen">
           <AppHeader />
