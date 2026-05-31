@@ -128,6 +128,7 @@ export async function upsertAttendance(
   playerId: string,
   present: boolean
 ): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { userId } = await requireCoachForSession(sessionId)
   const supabase = createClient()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,6 +152,7 @@ export async function batchUpsertAttendance(
   items: { playerId: string; present: boolean }[]
 ): Promise<void> {
   if (items.length === 0) return
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { userId } = await requireCoachForSession(sessionId)
   const supabase = createClient()
   const rows = items.map((i) => ({

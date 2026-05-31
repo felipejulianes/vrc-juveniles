@@ -61,7 +61,7 @@ export default async function EditarJugadorPage({ params }: Props) {
       <PlayerForm
         mode="edit"
         availableDivisions={availableDivisions}
-        defaultDivisionId={player.division_id}
+        defaultDivisionId={player.division_id ?? availableDivisions[0]?.id ?? ''}
         initial={{
           id: player.id,
           first_name: player.first_name,
@@ -70,7 +70,7 @@ export default async function EditarJugadorPage({ params }: Props) {
           birth_date: player.birth_date,
           parent_phone: player.parent_phone,
           parent_name: player.parent_name,
-          division_id: player.division_id,
+          division_id: player.division_id ?? '',
           photo_url: player.photo_url,
           position_primary: player.player_positions?.position_primary ?? null,
           position_alt1: player.player_positions?.position_alt1 ?? null,
