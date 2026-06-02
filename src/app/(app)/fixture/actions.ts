@@ -31,18 +31,6 @@ async function requireAdminOrCoachForDivision(
   return { userId: user.id, role }
 }
 
-async function requireAdmin(): Promise<{ userId: string }> {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('No autorizado')
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase as any)
-    .from('profiles').select('role').eq('id', user.id).single()
-  const role = (data as Pick<ProfileRow, 'role'> | null)?.role
-  if (role !== 'admin') throw new Error('Solo admin puede realizar esta accion')
-  return { userId: user.id }
-}
 
 async function requireAdminOrCoachForMatch(matchId: string): Promise<{ userId: string; role: 'admin' | 'coach' | 'tutora'; match: Pick<MatchRow, 'division_id' | 'manual'> }> {
   const supabase = createClient()
@@ -114,8 +102,18 @@ export async function updateMatch(matchId: string, input: MatchFormInput): Promi
 }
 
 export async function deleteMatch(matchId: string): Promise<void> {
-  await requireAdmin()
+  // Use a single client for both auth check and mutation to eliminate TOCTOU gap.
   const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('No autorizado')
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (supabase as any)
+    .from('profiles').select('role').eq('id', user.id).single()
+  if ((data as Pick<ProfileRow, 'role'> | null)?.role !== 'admin') {
+    throw new Error('Solo admin puede realizar esta accion')
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any).from('matches').delete().eq('id', matchId)
   if (error) throw new Error('No se pudo eliminar el partido: ' + error.message)
