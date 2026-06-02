@@ -44,6 +44,9 @@ async function requireAdminOrCoachForMatch(
 
   if (role === 'admin') return { userId: user.id, role, matchDivisionId }
 
+  // tutora is read-only: cannot save results or modify scoring events.
+  if (role === 'tutora') throw new Error('Las tutoras no pueden modificar el fixture')
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: cdData } = await (supabase as any)
     .from('coach_divisions')

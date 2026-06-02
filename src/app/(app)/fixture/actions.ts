@@ -22,6 +22,9 @@ async function requireAdminOrCoachForDivision(
   const role = ((profileData as Pick<ProfileRow, 'role'> | null)?.role ?? 'coach') as 'admin' | 'coach' | 'tutora'
   if (role === 'admin') return { userId: user.id, role: 'admin' }
 
+  // tutora is read-only: cannot create, update, or delete matches/scoring events.
+  if (role === 'tutora') throw new Error('Las tutoras no pueden modificar el fixture')
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: cdData } = await (supabase as any)
     .from('coach_divisions').select('division_id')
