@@ -78,6 +78,11 @@ export async function updateMatch(matchId: string, input: MatchFormInput): Promi
   const parsed = MatchFormSchema.parse(input)
   const { role, match } = await requireAdminOrCoachForMatch(matchId)
 
+  // Coach cannot edit URBA-imported matches (manual=false).
+  if (role !== 'admin' && !match.manual) {
+    throw new Error('Solo admin puede modificar partidos importados del fixture URBA')
+  }
+
   // Coach cannot move a match to a different division.
   if (role !== 'admin' && parsed.division_id !== match.division_id) {
     throw new Error('No podes cambiar la division del partido')
