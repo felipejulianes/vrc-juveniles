@@ -46,6 +46,17 @@ export function parseFixtureCSV(text: string): CsvParseResult {
       return
     }
 
+    const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+    if (!DATE_RE.test(fecha)) {
+      errors.push({ row: rowNum, message: `Fecha inválida (esperado YYYY-MM-DD): "${fecha}"` })
+      return
+    }
+    const parsedDate = new Date(fecha + 'T12:00:00')
+    if (isNaN(parsedDate.getTime())) {
+      errors.push({ row: rowNum, message: `Fecha no es una fecha válida: "${fecha}"` })
+      return
+    }
+
     const fecha_nro = parseInt(fecha_nro_str, 10)
     if (isNaN(fecha_nro)) {
       errors.push({ row: rowNum, message: `Fecha N° inválida: "${fecha_nro_str}"` })
