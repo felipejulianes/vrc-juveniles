@@ -120,11 +120,14 @@ export async function addScoringEvent(input: ScoringEventInput): Promise<{ event
 export async function deleteScoringEvent(eventId: string, matchId: string): Promise<void> {
   await requireAdminOrCoachForMatch(matchId)
   const supabase = createClient()
+  // Scope DELETE to both eventId AND matchId to prevent cross-match deletion
+  // and ensure cache revalidation always matches what was actually deleted.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
     .from('match_scoring_events')
     .delete()
     .eq('id', eventId)
+    .eq('match_id', matchId)
   if (error) throw new Error('No se pudo borrar el evento: ' + error.message)
   revalidatePath(`/fixture/${matchId}`)
 }
