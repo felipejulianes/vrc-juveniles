@@ -2,9 +2,7 @@ export type MatchResult = 'won' | 'lost' | 'draw' | 'pending'
 
 export function getMatchResult(
   scoreHome: number | null,
-  scoreAway: number | null,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _matchDate: string
+  scoreAway: number | null
 ): MatchResult {
   if (scoreHome === null || scoreAway === null) return 'pending'
   if (scoreHome > scoreAway) return 'won'

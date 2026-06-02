@@ -27,8 +27,8 @@ export function MatchCard({
   score_home,
   score_away,
 }: MatchCardProps) {
-  const result = getMatchResult(score_home, score_away, match_date)
-  const isPastUnscored = result === 'pending' && new Date(match_date + 'T23:59:59') < new Date()
+  const result = getMatchResult(score_home, score_away)
+  const isPastUnscored = result === 'pending' && new Date(match_date + 'T23:59:59Z') < new Date()
   const timeShort = match_time ? match_time.slice(0, 5) : null
 
   return (

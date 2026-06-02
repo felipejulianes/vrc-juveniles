@@ -3,16 +3,16 @@ import { getMatchResult, formatMatchDate } from './utils'
 
 describe('getMatchResult', () => {
   it('returns pending when no scores', () => {
-    expect(getMatchResult(null, null, '2026-04-11')).toBe('pending')
+    expect(getMatchResult(null, null)).toBe('pending')
   })
   it('returns won when home > away', () => {
-    expect(getMatchResult(24, 17, '2026-04-11')).toBe('won')
+    expect(getMatchResult(24, 17)).toBe('won')
   })
   it('returns lost when home < away', () => {
-    expect(getMatchResult(10, 21, '2026-04-11')).toBe('lost')
+    expect(getMatchResult(10, 21)).toBe('lost')
   })
   it('returns draw when home === away', () => {
-    expect(getMatchResult(15, 15, '2026-04-11')).toBe('draw')
+    expect(getMatchResult(15, 15)).toBe('draw')
   })
 })
 
