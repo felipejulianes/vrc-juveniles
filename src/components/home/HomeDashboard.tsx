@@ -45,10 +45,18 @@ function StatTile({ value, label }: { value: string; label: string }) {
   )
 }
 
+const ROLE_LABELS: Record<string, string> = {
+  admin: 'Administrador',
+  coach: 'Entrenador',
+  tutora: 'Tutora',
+}
+
 export function HomeDashboard({
   dataByDivision,
+  sessionInfo,
 }: {
   dataByDivision: Record<string, HomeDivisionData>
+  sessionInfo?: { fullName: string | null; role: string }
 }) {
   const { activeDivision } = useDivision()
 
@@ -192,6 +200,14 @@ export function HomeDashboard({
           <BarChart3 className="h-4 w-4" /> Estadística
         </Link>
       </div>
+
+      {/* Identidad de sesión */}
+      {sessionInfo && (
+        <p className="text-center text-xs text-muted-foreground pt-2">
+          Sesión: {sessionInfo.fullName ?? '—'} ·{' '}
+          {ROLE_LABELS[sessionInfo.role] ?? sessionInfo.role}
+        </p>
+      )}
     </div>
   )
 }

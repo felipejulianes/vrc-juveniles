@@ -13,7 +13,7 @@ export default async function HomePage() {
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { divisions } = await getJuvenileDivisionsForUser()
+  const { divisions, role, fullName } = await getJuvenileDivisionsForUser()
   const today = new Date().toISOString().split('T')[0]
 
   const dataByDivision: Record<string, HomeDivisionData> = {}
@@ -60,5 +60,10 @@ export default async function HomePage() {
     })
   )
 
-  return <HomeDashboard dataByDivision={dataByDivision} />
+  return (
+    <HomeDashboard
+      dataByDivision={dataByDivision}
+      sessionInfo={{ fullName, role }}
+    />
+  )
 }
