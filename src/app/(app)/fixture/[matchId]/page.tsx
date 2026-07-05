@@ -1,5 +1,8 @@
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
+import { Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { getLineup } from '@/lib/queries/lineups'
 import { getWithEvents } from '@/lib/queries/matches'
 import { listByDivision as listPlayersByDivision } from '@/lib/queries/players'
 import { MatchDetailHeader } from '@/components/fixture/MatchDetailHeader'
@@ -31,6 +34,9 @@ export default async function MatchDetailPage({
   // If RLS hides the match (or it does not exist), getWithEvents returns null -> notFound.
   const match = await getWithEvents(params.matchId)
   if (!match) notFound()
+
+  const lineup = await getLineup(match.id)
+  const starterCount = lineup.filter((e) => e.slot <= 15).length
 
   // Player roster of the match's division (active players only)
   const playersRaw = await listPlayersByDivision(match.division_id)
@@ -66,6 +72,21 @@ export default async function MatchDetailPage({
           fecha_nro: match.fecha_nro,
         }}
       />
+
+      <Link
+        href={`/fixture/${match.id}/equipo`}
+        className="flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-semibold"
+      >
+        <span className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          {starterCount > 0 ? 'Ver / editar equipo' : 'Armar equipo'}
+        </span>
+        {starterCount > 0 && (
+          <span className="text-sm font-normal opacity-90">
+            {starterCount}/15 titulares
+          </span>
+        )}
+      </Link>
 
       <ResultEditor
         matchId={match.id}
