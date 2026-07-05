@@ -79,12 +79,12 @@ export default async function AppLayout({
     <DivisionProvider initialDivisions={juvenileDivisions} userRole={userRole as 'admin' | 'coach' | 'tutora'}>
       <SyncProvider>
         <div className="flex flex-col min-h-screen">
-          <AppHeader />
+          <AppHeader isAdmin={userRole === 'admin'} />
           <OfflineBanner />
           <main className="flex-1 pb-[calc(64px+env(safe-area-inset-bottom))]">
             {children}
           </main>
-          <BottomNav userRole={userRole as 'admin' | 'coach' | 'tutora'} />
+          <BottomNav />
           <Toaster />
         </div>
       </SyncProvider>
