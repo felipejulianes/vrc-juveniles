@@ -13,9 +13,8 @@ export function GoogleSignInButton() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo:
-          (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000') +
-          '/api/auth/callback',
+        // origin real del deploy — evita depender de NEXT_PUBLIC_SITE_URL en Vercel
+        redirectTo: window.location.origin + '/api/auth/callback',
       },
     })
     // No need to setLoading(false) — browser will navigate away
