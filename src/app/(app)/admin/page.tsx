@@ -72,6 +72,24 @@ export default async function AdminPage() {
     <div className="p-4 space-y-6">
       <h1 className="text-xl font-semibold">Administración</h1>
 
+      {/* Import de fixture URBA */}
+      <Card>
+        <CardContent className="pt-4 pb-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-medium">Fixture URBA</p>
+            <p className="text-xs text-muted-foreground">
+              Importar el calendario de partidos desde CSV
+            </p>
+          </div>
+          <a
+            href="/admin/fixture-import"
+            className="shrink-0 px-3 py-2 rounded-lg bg-[color:var(--primary)] text-[color:var(--primary-foreground)] text-sm font-semibold"
+          >
+            Importar
+          </a>
+        </CardContent>
+      </Card>
+
       {/* Create Coach Form */}
       <Card>
         <CardHeader>

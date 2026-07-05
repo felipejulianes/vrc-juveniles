@@ -88,19 +88,33 @@ export async function createSession(
   const { userId } = await requireCoachForDivision(parsed.division_id)
   const supabase = createClient()
 
-  // Check for existing session same day same division — return it instead of creating duplicate
+  // training_sessions tiene UNIQUE (division_id, session_date) y la migración 026
+  // de infantiles pre-creó sesiones 'miercoles' también en divisiones juveniles.
+  // Buscamos cualquier sesión existente de ese día: si es 'entrenamiento' la
+  // reusamos; si es de otro tipo la convertimos (esas filas son huérfanas en
+  // divisiones juveniles — infantiles no las muestra).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (supabase as any)
     .from('training_sessions')
-    .select('id')
+    .select('id, session_type')
     .eq('division_id', parsed.division_id)
     .eq('session_date', parsed.session_date)
-    .eq('session_type', 'entrenamiento')
     .maybeSingle()
 
   if (existing) {
+    const row = existing as { id: string; session_type: string }
+    if (row.session_type !== 'entrenamiento') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: convError } = await (supabase as any)
+        .from('training_sessions')
+        .update({ session_type: 'entrenamiento', created_by: userId })
+        .eq('id', row.id)
+      if (convError) {
+        throw new Error('No se pudo crear la sesión: ' + convError.message)
+      }
+    }
     revalidatePath('/lista')
-    return { sessionId: (existing as { id: string }).id }
+    return { sessionId: row.id }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
