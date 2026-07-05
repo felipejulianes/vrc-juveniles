@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 2 context gathered
-last_updated: "2026-05-29T18:18:03.356Z"
+status: executing
+stopped_at: "Rework de producto 2026-07-05: nav + home + stats + team builder implementados"
+last_updated: "2026-07-05T00:00:00.000Z"
 progress:
   total_phases: 4
-  completed_phases: 0
-  total_plans: 5
-  completed_plans: 4
-  percent: 80
+  completed_phases: 2
+  total_plans: 10
+  completed_plans: 10
+  percent: 75
 ---
 
 # Project State
@@ -20,64 +20,37 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-24)
 
 **Core value:** El entrenador llega al partido sabiendo quiénes vinieron a entrenar, qué puesto juega cada uno, y puede armar el equipo del sábado desde la app en segundos
-**Current focus:** Phase 2 — Fixture Management (ready to plan)
+**Current focus:** Cerrar Team Builder (migración pendiente de aplicar) y UAT integral
 
-## Current Position
+## Current Position (auditado contra código real el 2026-07-05)
 
-Phase: 1 of 4 (Foundation, Players & Attendance)
-Plan: 01-05 — Complete ✅
-Status: Online flow verified. Offline queue (Part B) and auth deep-link (Part C) deferred as known tech debt — to verify when deploying to Vercel.
+- **Fase 1 (Foundation, Players & Attendance): COMPLETA.** Migraciones aplicadas en prod (verificado vía REST).
+- **Fase 2 (Fixture Management): COMPLETA en código.** Migraciones `matches` + `match_scoring_events` aplicadas. La tabla `matches` está VACÍA en prod — el CSV real (`fixture-virreyes-2026.csv`, raíz del repo) nunca se importó.
+- **Fase 3 (Team Builder): IMPLEMENTADA el 2026-07-05.** Falta aplicar la migración `20260705000000_match_lineups.sql` en prod (bloqueada por permisos en la sesión — additive-only, tabla nueva) y UAT en dispositivo real.
+- **Fase 4 (Stats): Estadística de asistencia COMPLETA** (reusa RPCs de infantiles con `p_session_type='entrenamiento'`). **Tutora: PENDIENTE.**
 
-Progress: [██░░░░░░░░] 20%
+## Rework de producto 2026-07-05
 
-## Phase 1 Plan Status
+- BottomNav: Inicio / Lista / Fixture / Jugadores / Estadística — todos habilitados. Tab Admin eliminado; acceso admin por ícono escudo en header.
+- Home dashboard nuevo en `/` (antes redirect a /jugadores): próximo partido + CTA "Armar equipo", "Tomar lista de hoy", último entrenamiento, KPIs, atajos. Se eliminó `src/app/page.tsx` (conflicto de ruta con `(app)/page.tsx`).
+- `/estadistica` real: KPIs, tendencia por sesión (barras), tabla por jugador 30d/año con flag de baja asistencia (<60%).
+- Team Builder: `/fixture/[matchId]/equipo` — tap-to-place, slots 1-15 agrupados Forwards/Backs + suplentes 16-23, picker ordenado por puesto registrado y asistencia reciente (últimos 4 entrenamientos), warning apto médico, guardado compartido por división (`match_lineups`).
+- Fix landmine: `training_sessions` UNIQUE(division_id, session_date) chocaba con sesiones 'miercoles' pre-creadas por infantiles (migración 026) en divisiones M15-M19. `createSession` ahora convierte esas filas huérfanas a 'entrenamiento'.
+- Admin page linkea a /admin/fixture-import (antes inaccesible por UI).
 
-| Plan | Description | Status |
-|------|-------------|--------|
-| 01-01 | Scaffold, deps, shadcn, PWA | ✅ Complete |
-| 01-02 | Auth, app shell, bottom nav, division selector | ✅ Complete |
-| 01-03 | Player list + profile (read) | ✅ Complete |
-| 01-04 | Player CRUD + photo upload | ✅ Complete |
-| 01-05 | Attendance: grid, history, edit, offline queue | ✅ Complete (offline+auth verify deferred to Vercel deploy) |
+## Acciones pendientes (requieren al usuario)
 
-## Schema Deviations (discovered 2026-05-29)
+1. Aplicar `supabase/migrations/20260705000000_match_lineups.sql` en prod (SQL editor o `supabase db push`).
+2. Importar `fixture-virreyes-2026.csv` vía /admin/fixture-import (necesita datos en prod para probar fixture/builder).
+3. UAT en celular real (PWA): tomar lista, armar equipo, ver stats.
+4. Commit del trabajo (no se commiteó — regla: no commit sin pedido explícito).
 
-The shared `training_sessions` and `attendance_records` tables preexisted from infantiles with a different schema than planned:
+## Tech Debt
 
-- `training_sessions`: no `day_label` column — removed from types, insert, and form entirely
-- `attendance_records`: only 3 columns (`session_id`, `player_id`, `present`) — no `recorded_by`, no `recorded_at` — removed from types and upserts
-- `session_type = 'entrenamiento'` confirmed working ✓
-- Composite PK on `(session_id, player_id)` confirmed working for upsert conflict target ✓
-
-## UX Changes Made (2026-05-29)
-
-- AttendanceGrid redesigned: list rows → 3-column square card grid with player photos
-- Back button added to attendance screen
-- Toast "Presente ✓" / "Ausente" per tap (1.2s) confirms auto-save
-- "Tomar lista" / "Abrir lista" copy replaces "Iniciar/Finalizar entrenamiento"
-- SessionForm simplified: removed day chip selector (redundant with date), removed division selector (uses active division from header)
-- `day_label` removed from schema, form, and DB types entirely
-
-## Tech Debt — Deferred Verification (verify at Vercel deploy)
-
-**Part B — Offline (can test via DevTools → Network → Offline):**
-
-- Confirm offline banner appears
-- Confirm player roster loads from IDB cache
-- Tap players → cards flip green → "{n} cambios pendientes"
-- Reconnect → "Lista sincronizada" toast
-
-**Part C — Authorization:**
-
-- Deep-link to session from another division → notFound()
-- Direct Server Action call with wrong session → auth error
-
-## Blockers/Concerns
-
-- Phase 2: Need a real URBA fixture Excel file from the club admin before writing the parser
-- Phase 3: iOS PWA tap-to-place / @dnd-kit behavior must be validated on a real iPhone
+- Offline queue y auth deep-link: verificación diferida (desde fase 1).
+- Tutora: rol ve PendingActivationScreen en juveniles (layout exige coach_divisions para no-admin). Diseñar fase Tutora.
+- `PlaceholderScreen` puede quedar sin usos — revisar y borrar.
 
 ## Session Continuity
 
-Last session: 2026-05-29T18:18:03.353Z
-Stopped at: Phase 2 context gathered
+Last session: 2026-07-05 — auditoría + rework producto/implementación (nav, home, stats, team builder).

@@ -81,7 +81,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Players & Attendance | 0/5 | Not started | - |
-| 2. Fixture Management | 0/TBD | Not started | - |
-| 3. Team Builder | 0/TBD | Not started | - |
-| 4. Stats, Tutora & Polish | 0/TBD | Not started | - |
+| 1. Foundation, Players & Attendance | 5/5 | Complete | 2026-05-29 |
+| 2. Fixture Management | 5/5 | Complete (import de datos a prod pendiente) | 2026-05-29 |
+| 3. Team Builder | 1/1 | Código completo — migración match_lineups pendiente de aplicar + UAT | 2026-07-05 |
+| 4. Stats, Tutora & Polish | 1/2 | Stats completa (2026-07-05); Tutora pendiente | - |
