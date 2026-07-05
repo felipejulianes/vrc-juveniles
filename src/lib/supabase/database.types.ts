@@ -388,6 +388,52 @@ export type Database = {
         }
         Relationships: []
       }
+      match_lineups: {
+        Row: {
+          match_id: string
+          player_id: string
+          slot: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          match_id: string
+          player_id: string
+          slot: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          match_id?: string
+          player_id?: string
+          slot?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_lineups_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_lineups_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_lineups_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       match_scoring_events: {
         Row: {
           created_at: string
