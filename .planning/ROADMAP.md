@@ -85,3 +85,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 2. Fixture Management | 5/5 | Complete (import de datos a prod pendiente) | 2026-05-29 |
 | 3. Team Builder | 1/1 | Código completo — migración match_lineups pendiente de aplicar + UAT | 2026-07-05 |
 | 4. Stats, Tutora & Polish | 1/2 | Stats completa (2026-07-05); Tutora pendiente | - |
+
+## Backlog
+
+### Phase 999.1: Toggle dark/light mode (BACKLOG)
+
+**Goal:** [Captured for future planning] Toggle dark/light mode para VRC Juveniles (y conceptualmente para Infantiles). El tema claro quedó como default (tokens en `:root` de globals.css). Para hacerlo: reintroducir bloque `.dark` con los tokens oscuros viejos (están en git history, commit previo a 26434f8), usar `next-themes` (ya instalado) con ThemeProvider + toggle en el header. No prioritario — pedido por Felipe el 2026-07-05.
+**Requirements:** TBD
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready)
