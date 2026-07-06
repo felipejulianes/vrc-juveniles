@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { listAllJuvenile } from '@/lib/queries/matches'
 import { FixtureListShell } from '@/components/fixture/FixtureListShell'
+import { PageHeader } from '@/components/layout/PageHeader'
 
 export default async function FixturePage() {
   const supabase = createClient()
@@ -31,5 +32,10 @@ export default async function FixturePage() {
     score_away: m.score_away,
   }))
 
-  return <FixtureListShell allMatches={items} isAdmin={role === 'admin'} />
+  return (
+    <div>
+      <PageHeader title="Fixture" subtitle="Partidos y resultados" />
+      <FixtureListShell allMatches={items} isAdmin={role === 'admin'} />
+    </div>
+  )
 }

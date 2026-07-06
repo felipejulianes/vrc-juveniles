@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { listSessionsByDivision, type SessionWithCount } from '@/lib/queries/attendance'
 import { SessionList } from '@/components/attendance/SessionList'
+import { PageHeader } from '@/components/layout/PageHeader'
 
 export default async function ListaPage() {
   const supabase = createClient()
@@ -69,7 +70,7 @@ export default async function ListaPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold px-4 pt-4 pb-0">Lista</h1>
+      <PageHeader title="Lista" subtitle="Asistencia a entrenamientos" />
       <SessionList sessionsByDivision={sessionsByDivision} />
     </div>
   )

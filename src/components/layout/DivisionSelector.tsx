@@ -30,7 +30,7 @@ export function DivisionSelector() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="h-9 inline-flex items-center gap-1 rounded-full px-3 text-sm font-medium bg-secondary text-secondary-foreground border border-[color:var(--primary)]"
+        className="h-9 inline-flex items-center gap-1 rounded-full px-3 text-sm font-medium bg-secondary text-secondary-foreground border border-border"
       >
         {activeDivision?.name ?? 'División'}
         <ChevronDown

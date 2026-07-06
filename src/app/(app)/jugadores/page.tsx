@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { listByDivision } from '@/lib/queries/players'
 import { PlayerListClient } from '@/components/players/PlayerListClient'
+import { PageHeader } from '@/components/layout/PageHeader'
 import type { PlayerWithPosition } from '@/lib/queries/players'
 
 export default async function JugadoresPage() {
@@ -71,9 +72,7 @@ export default async function JugadoresPage() {
 
   return (
     <div>
-      <div className="px-4 py-3">
-        <h1 className="text-xl font-semibold">Jugadores</h1>
-      </div>
+      <PageHeader title="Jugadores" subtitle="Plantel de la división" />
       <PlayerListClient initialPlayersByDivision={playersByDivision} />
     </div>
   )

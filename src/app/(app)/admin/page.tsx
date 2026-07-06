@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { createCoach } from './actions'
 import { CoachDivisionsEditor } from '@/components/admin/CoachDivisionsEditor'
+import { PageHeader } from '@/components/layout/PageHeader'
 
 type DivisionRow = { id: string; name: string; is_juvenile?: boolean }
 type ProfileRow = { id: string; full_name: string | null; role: 'admin' | 'coach' | 'tutora' }
@@ -70,8 +71,9 @@ export default async function AdminPage() {
     }))
 
   return (
-    <div className="p-4 space-y-6">
-      <h1 className="text-xl font-semibold">Administración</h1>
+    <div className="pb-6">
+      <PageHeader title="Administración" subtitle="Fixture, coaches y divisiones" />
+      <div className="px-4 space-y-6 max-w-2xl mx-auto">
 
       {/* Import de fixture URBA */}
       <Card>
@@ -177,6 +179,7 @@ export default async function AdminPage() {
             })}
           </div>
         )}
+      </div>
       </div>
     </div>
   )

@@ -100,7 +100,7 @@ export function StatsShell({
   if (!activeDivision || isAllDivisions(activeDivision)) {
     return (
       <div className="p-4">
-        <h1 className="text-xl font-semibold mb-2">Estadística</h1>
+        <h1 className="text-2xl font-bold tracking-tight mb-2">Estadística</h1>
         <p className="text-sm text-muted-foreground">
           Elegí una división en el selector de arriba.
         </p>
@@ -126,7 +126,12 @@ export function StatsShell({
 
   return (
     <div className="px-4 pt-4 pb-6 space-y-4 max-w-2xl mx-auto">
-      <h1 className="text-xl font-semibold">Estadística</h1>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Estadística</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          Asistencia de {activeDivision.name}
+        </p>
+      </div>
 
       {kpis && (
         <div className="flex gap-2">
