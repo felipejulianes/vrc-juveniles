@@ -64,10 +64,13 @@ export async function createCoach(formData: FormData) {
     throw new Error('No se pudo obtener el ID del usuario creado.')
   }
 
-  // Step 2: Insert profile — cast through unknown to bypass hand-written type limitation
+  // Step 2: Upsert profile — el trigger on_auth_user_created ya crea la fila,
+  // acá solo pisamos el nombre con el que cargó el admin
   const { error: profileError } = await adminClient
     .from('profiles')
-    .insert({ id: newUserId, full_name, role: 'coach' } as unknown as never)
+    .upsert({ id: newUserId, full_name, role: 'coach' } as unknown as never, {
+      onConflict: 'id',
+    })
 
   if (profileError) {
     throw new Error(`No se pudo crear el perfil: ${profileError.message}`)
@@ -85,6 +88,49 @@ export async function createCoach(formData: FormData) {
 
   if (cdError) {
     throw new Error(`No se pudo asignar las divisiones: ${cdError.message}`)
+  }
+
+  revalidatePath('/admin')
+}
+
+/**
+ * Reemplaza las divisiones JUVENILES asignadas a un coach existente.
+ * No toca asignaciones a divisiones de infantiles (M6-M14).
+ */
+export async function setCoachDivisions(
+  coachId: string,
+  divisionIds: string[]
+): Promise<void> {
+  await requireAdmin()
+
+  if (!coachId) throw new Error('Falta el coach.')
+
+  const adminClient = createAdminClient()
+
+  // Universo de divisiones juveniles — límite de lo que esta acción puede tocar
+  const { data: juvData, error: juvError } = await adminClient
+    .from('divisions')
+    .select('id')
+    .eq('is_juvenile', true)
+  if (juvError) throw new Error('No se pudieron cargar las divisiones: ' + juvError.message)
+
+  const juvenileIds = new Set(((juvData as { id: string }[] | null) ?? []).map((d) => d.id))
+  const invalid = divisionIds.filter((id) => !juvenileIds.has(id))
+  if (invalid.length > 0) throw new Error('División inválida.')
+
+  const { error: delError } = await adminClient
+    .from('coach_divisions')
+    .delete()
+    .eq('coach_id', coachId)
+    .in('division_id', Array.from(juvenileIds))
+  if (delError) throw new Error('No se pudo actualizar: ' + delError.message)
+
+  if (divisionIds.length > 0) {
+    const rows = divisionIds.map((division_id) => ({ coach_id: coachId, division_id }))
+    const { error: insError } = await adminClient
+      .from('coach_divisions')
+      .insert(rows as unknown as never)
+    if (insError) throw new Error('No se pudo asignar: ' + insError.message)
   }
 
   revalidatePath('/admin')

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { createCoach } from './actions'
+import { CoachDivisionsEditor } from '@/components/admin/CoachDivisionsEditor'
 
 type DivisionRow = { id: string; name: string; is_juvenile?: boolean }
 type ProfileRow = { id: string; full_name: string | null; role: 'admin' | 'coach' | 'tutora' }
@@ -148,7 +149,11 @@ export default async function AdminPage() {
 
       {/* Coaches list */}
       <div>
-        <h2 className="text-base font-semibold mb-3">Coaches registrados</h2>
+        <h2 className="text-base font-semibold mb-1">Coaches registrados</h2>
+        <p className="text-xs text-muted-foreground mb-3">
+          Tocá las divisiones para asignar o quitar. Incluye a cualquiera que
+          haya entrado con Google y esté pendiente de activación.
+        </p>
         {coaches.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No hay coaches registrados.
@@ -156,22 +161,18 @@ export default async function AdminPage() {
         ) : (
           <div className="space-y-2">
             {coaches.map((coach) => {
-              const myDivisions = juvenileCoachDivisions
+              const assignedIds = juvenileCoachDivisions
                 .filter((cd) => cd.coach_id === coach.id)
-                .map((cd) => cd.division_name ?? '')
-                .filter(Boolean)
+                .map((cd) => cd.division_id)
 
               return (
-                <Card key={coach.id}>
-                  <CardContent className="pt-4 pb-3">
-                    <p className="text-sm font-medium">{coach.full_name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {myDivisions.length > 0
-                        ? myDivisions.join(', ')
-                        : 'Sin divisiones asignadas'}
-                    </p>
-                  </CardContent>
-                </Card>
+                <CoachDivisionsEditor
+                  key={coach.id}
+                  coachId={coach.id}
+                  coachName={coach.full_name ?? 'Sin nombre'}
+                  divisions={juvenileDivisions}
+                  assignedIds={assignedIds}
+                />
               )
             })}
           </div>
