@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Camera, Loader2 } from 'lucide-react'
+import { Camera, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { PlayerAvatar } from './PlayerAvatar'
 import { setPlayerPhotoUrl } from '@/app/(app)/jugadores/actions'
@@ -55,7 +55,9 @@ function resizeImage(file: File): Promise<Blob> {
 export function AvatarUpload({ playerId, initialPhotoUrl, firstName, lastName, onUploaded }: Props) {
   const [photoUrl, setPhotoUrl] = useState<string | null>(initialPhotoUrl)
   const [uploading, setUploading] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -117,7 +119,7 @@ export function AvatarUpload({ playerId, initialPhotoUrl, firstName, lastName, o
       <button
         type="button"
         disabled={uploading}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => setMenuOpen((v) => !v)}
         className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-[color:var(--primary)] text-[color:var(--primary-foreground)] shadow disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label="Cambiar foto"
       >
@@ -127,7 +129,56 @@ export function AvatarUpload({ playerId, initialPhotoUrl, firstName, lastName, o
           <Camera className="h-3.5 w-3.5" />
         )}
       </button>
-      {/* Hidden file input */}
+
+      {menuOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute left-1/2 -translate-x-1/2 top-full mt-1 z-50 w-44 p-1 rounded-lg border shadow-md"
+            style={{
+              backgroundColor: 'var(--popover)',
+              borderColor: 'var(--border)',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false)
+                cameraInputRef.current?.click()
+              }}
+              className="w-full flex items-center gap-2 text-left px-3 py-2 rounded text-sm hover:bg-secondary"
+            >
+              <Camera className="h-4 w-4" /> Sacar foto
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false)
+                inputRef.current?.click()
+              }}
+              className="w-full flex items-center gap-2 text-left px-3 py-2 rounded text-sm hover:bg-secondary"
+            >
+              <ImageIcon className="h-4 w-4" /> Elegir de galería
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Cámara directa (mobile abre la cámara trasera) */}
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/jpeg,image/png"
+        capture="environment"
+        className="hidden"
+        onChange={handleFileChange}
+        aria-hidden="true"
+      />
+      {/* Galería / archivos */}
       <input
         ref={inputRef}
         type="file"
